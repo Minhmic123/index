@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Đăng Nhập</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .login-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .login-container h2 {
+            margin-bottom: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Đăng Nhập</h2>
+        <form id="loginForm" onsubmit="return validateForm()">
+            <div class="error-message" id="error-message"></div>
+            <input type="text" id="username" placeholder="Tên đăng nhập" required><br>
+            <input type="password" id="password" placeholder="Mật khẩu" required><br>
+            <button type="submit">Đăng Nhập</button>
+        </form>
+    </div>
+
+    <script>
+        function validateForm() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            var errorMessage = document.getElementById("error-message");
+
+            // Tài khoản và mật khẩu mặc định
+            var validUsername = "admin";
+            var validPassword = "123";
+
+            if (username === "" || password === "") {
+                errorMessage.textContent = "Vui lòng điền tất cả các trường.";
+                return false;
+            }
+
+            if (username === validUsername && password === validPassword) {
+                // Chuyển hướng tới trang 'monannhatbanpro.html' sau khi đăng nhập thành công
+                window.location.href = "monannhatbanpro.html"; 
+                return false;  // Ngừng gửi form để tránh reload trang
+            } else {
+                errorMessage.textContent = "Tên đăng nhập hoặc mật khẩu không đúng.";
+                return false;
+            }
+        }
+    </script>
+</body>
+</html>

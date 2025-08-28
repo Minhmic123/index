@@ -1,0 +1,479 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tokyo Bites – Món ăn Nhật</title>
+  <meta name="description" content="Cửa hàng món Nhật trực tuyến: sushi, ramen, bento, tráng miệng và đồ uống. Giao nhanh, chất lượng chuẩn Nhật." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Poppins', 'ui-sans-serif', 'system-ui'] },
+          colors: {
+            brand: {
+              50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 800: '#075985', 900: '#0c4a6e'
+            },
+            sakura: '#FF6B6B',
+            ink: '#0f172a'
+          },
+          boxShadow: { soft: '0 10px 30px rgba(2, 132, 199, 0.12)'}
+        }
+      }
+    }
+  </script>
+  <style>
+    .glass { backdrop-filter: blur(10px); background: rgba(255,255,255,0.65); }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .rating span { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  </style>
+</head>
+<body class="bg-slate-50 text-ink">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center gap-3">
+      <button id="openSidebar" class="lg:hidden p-2 rounded-xl hover:bg-slate-100" aria-label="Mở menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <a href="#" class="flex items-center gap-3">
+        <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-600 text-white shadow-soft font-bold">日</span>
+        <div>
+          <div class="text-xl font-extrabold tracking-tight">Tokyo Bites</div>
+          <div class="text-xs text-slate-500 -mt-1">Authentic Japanese Food</div>
+        </div>
+      </a>
+      <div class="ml-auto flex items-center gap-2">
+        <button id="openSearch" class="hidden md:flex items-center gap-2 py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-sm">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>
+          Tìm kiếm ( / )
+        </button>
+        <button id="openCart" class="relative py-2 px-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-medium shadow-soft">
+          <svg class="inline -mt-1" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+          Giỏ hàng
+          <span id="cartCount" class="absolute -top-2 -right-2 text-xs bg-sakura text-white rounded-full w-5 h-5 inline-flex items-center justify-center">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sidebar (mobile) -->
+  <aside id="sidebar" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/30" id="closeSidebar"></div>
+    <nav class="absolute left-0 top-0 h-full w-80 p-6 bg-white shadow-xl space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="text-lg font-semibold">Danh mục</div>
+        <button id="closeSidebarBtn" class="p-2 rounded-xl hover:bg-slate-100" aria-label="Đóng menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M6 18L18 6"/></svg>
+        </button>
+      </div>
+      <ul class="space-y-2" id="mobileCategories"></ul>
+      <div class="pt-4 border-t">
+        <a href="#about" class="text-sm text-slate-600 hover:text-ink">Về chúng tôi</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Hero -->
+  <section class="relative">
+    <div class="absolute inset-0 -z-10">
+      <img src="https://images.unsplash.com/photo-1593030668930-8130ab89d021?q=80&w=1600&auto=format&fit=crop" alt="Sushi background" class="w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/25 to-white/90"></div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+      <div class="glass rounded-3xl p-6 md:p-10 shadow-soft">
+        <div class="flex flex-col md:flex-row md:items-end gap-6">
+          <div class="md:w-3/4">
+            <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">Ẩm thực Nhật Bản<br><span class="text-brand-600">Chuẩn vị – Tươi ngon – Giao nhanh</span></h1>
+            <p class="mt-3 text-slate-700 max-w-2xl">Sushi, ramen, bento, tráng miệng, matcha... Chọn món yêu thích và đặt ngay hôm nay. Ưu đãi 15% cho đơn đầu tiên!</p>
+          </div>
+          <div class="md:w-1/4 flex items-center md:justify-end gap-3">
+            <a href="#menu" class="inline-flex items-center justify-center px-5 py-3 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-semibold shadow-soft">Đặt món</a>
+            <a href="#about" class="inline-flex items-center justify-center px-5 py-3 rounded-2xl border border-slate-300 hover:bg-white font-semibold">Xem thêm</a>
+          </div>
+        </div>
+        <div class="mt-5 grid grid-cols-2 md:grid-cols-4 gap-3 text-xs text-slate-600">
+          <div class="flex items-center gap-2 bg-white/70 rounded-xl px-3 py-2"><span>🚚</span>Giao trong 45–60 phút</div>
+          <div class="flex items-center gap-2 bg-white/70 rounded-xl px-3 py-2"><span>🍣</span>Nguyên liệu cao cấp</div>
+          <div class="flex items-center gap-2 bg-white/70 rounded-xl px-3 py-2"><span>🧊</span>Đóng gói mát an toàn</div>
+          <div class="flex items-center gap-2 bg-white/70 rounded-xl px-3 py-2"><span>💳</span>COD / Momo / Thẻ</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Controls -->
+  <section id="menu" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+      <div class="flex items-center gap-2 flex-wrap">
+        <button data-cat="all" class="cat-btn active px-4 py-2 rounded-xl bg-ink text-white text-sm">Tất cả</button>
+        <button data-cat="Sushi" class="cat-btn px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-sm">Sushi</button>
+        <button data-cat="Ramen" class="cat-btn px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-sm">Ramen</button>
+        <button data-cat="Bento" class="cat-btn px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-sm">Bento</button>
+        <button data-cat="Dessert" class="cat-btn px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-sm">Tráng miệng</button>
+        <button data-cat="Drink" class="cat-btn px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-sm">Đồ uống</button>
+      </div>
+      <div class="flex gap-3 items-center">
+        <div class="relative">
+          <input id="search" type="text" placeholder="Tìm món, ví dụ: salmon, matcha..." class="w-64 md:w-80 rounded-2xl border border-slate-300 pl-10 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500" />
+          <svg class="absolute left-3 top-2.5" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>
+        </div>
+        <select id="sort" class="rounded-2xl border border-slate-300 py-2 px-3 text-sm">
+          <option value="featured">Nổi bật</option>
+          <option value="price-asc">Giá tăng dần</option>
+          <option value="price-desc">Giá giảm dần</option>
+          <option value="rating-desc">Đánh giá cao</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div id="productGrid" class="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5"></div>
+  </section>
+
+  <!-- About / CTA -->
+  <section id="about" class="bg-white border-t border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid md:grid-cols-2 gap-8 items-center">
+      <img class="rounded-3xl shadow-lg" src="https://images.unsplash.com/photo-1553621042-f6e147245754?q=80&w=1200&auto=format&fit=crop" alt="Ramen bowl" />
+      <div>
+        <h2 class="text-2xl md:text-3xl font-bold">Chất lượng chuẩn Nhật, phục vụ tận tâm</h2>
+        <p class="mt-3 text-slate-600">Chúng tôi hợp tác với đầu bếp Nhật nhiều năm kinh nghiệm. Nguyên liệu nhập trực tiếp hằng ngày, đảm bảo độ tươi và an toàn. Quán có chứng nhận vệ sinh an toàn thực phẩm.</p>
+        <ul class="mt-4 space-y-2 text-slate-700 list-disc pl-5">
+          <li>Hóa đơn điện tử, xuất VAT theo yêu cầu</li>
+          <li>Giao nội thành trong 45–60 phút</li>
+          <li>Miễn phí đổi trả nếu không hài lòng trong 24h</li>
+        </ul>
+        <div class="mt-6 flex gap-3">
+          <a href="#menu" class="px-5 py-3 rounded-2xl bg-ink text-white font-semibold">Khám phá menu</a>
+          <button id="openContact" class="px-5 py-3 rounded-2xl border border-slate-300 hover:bg-slate-50 font-semibold">Liên hệ tư vấn</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-ink text-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid md:grid-cols-4 gap-8">
+      <div>
+        <div class="text-white text-lg font-bold">Tokyo Bites</div>
+        <p class="mt-2 text-sm text-slate-400">Sushi • Ramen • Bento • Matcha</p>
+      </div>
+      <div>
+        <div class="font-semibold mb-2 text-white">Giờ mở cửa</div>
+        <ul class="text-sm space-y-1 text-slate-300">
+          <li>Thứ 2–CN: 10:00 – 21:30</li>
+          <li>Giao món: 10:30 – 21:00</li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-semibold mb-2 text-white">Liên hệ</div>
+        <ul class="text-sm space-y-1 text-slate-300">
+          <li>Hotline: 0901 234 567</li>
+          <li>Zalo: @tokyobites</li>
+          <li>Email: hello@tokyobites.vn</li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-semibold mb-2 text-white">Đăng ký nhận ưu đãi</div>
+        <form id="newsletter" class="flex gap-2">
+          <input type="email" required placeholder="Email của bạn" class="flex-1 rounded-xl border border-slate-600 bg-ink/40 text-white placeholder-slate-400 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500" />
+          <button class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white">Đăng ký</button>
+        </form>
+        <p id="newsletterMsg" class="text-xs text-slate-400 mt-2"></p>
+      </div>
+    </div>
+    <div class="border-t border-slate-700 text-xs text-slate-400 py-4 text-center">© <span id="year"></span> Tokyo Bites. All rights reserved.</div>
+  </footer>
+
+  <!-- Cart Drawer -->
+  <div id="cartDrawer" class="fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white shadow-2xl translate-x-full transition-transform duration-300 z-50 flex flex-col">
+    <div class="p-4 border-b flex items-center justify-between">
+      <div class="text-lg font-semibold">Giỏ hàng</div>
+      <button id="closeCart" class="p-2 rounded-xl hover:bg-slate-100" aria-label="Đóng giỏ hàng">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M6 18L18 6"/></svg>
+      </button>
+    </div>
+    <div id="cartItems" class="flex-1 overflow-auto p-4 space-y-3"></div>
+    <div class="p-4 border-t bg-white">
+      <div class="flex items-center justify-between text-sm text-slate-600 mb-2"><span>Tạm tính</span><span id="subtotal">0 ₫</span></div>
+      <div class="flex items-center justify-between text-sm text-slate-600 mb-2"><span>Phí giao (ước tính)</span><span id="shipping">15.000 ₫</span></div>
+      <div class="flex items-center justify-between text-lg font-semibold"><span>Tổng</span><span id="total">0 ₫</span></div>
+      <button id="checkoutBtn" class="mt-3 w-full py-3 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-semibold">Thanh toán</button>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div id="modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/40" id="closeModal"></div>
+    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-[95vw] max-w-xl rounded-2xl shadow-xl">
+      <div class="p-5 border-b flex items-center justify-between">
+        <div class="text-lg font-semibold" id="modalTitle">Liên hệ</div>
+        <button id="xModal" class="p-2 rounded-xl hover:bg-slate-100">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M6 18L18 6"/></svg>
+        </button>
+      </div>
+      <div class="p-5" id="modalBody">
+        <form id="contactForm" class="space-y-3">
+          <div>
+            <label class="text-sm text-slate-600">Họ tên</label>
+            <input required class="w-full mt-1 rounded-xl border border-slate-300 px-3 py-2" />
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <label class="text-sm text-slate-600">Số điện thoại</label>
+              <input required class="w-full mt-1 rounded-xl border border-slate-300 px-3 py-2" />
+            </div>
+            <div>
+              <label class="text-sm text-slate-600">Email</label>
+              <input type="email" class="w-full mt-1 rounded-xl border border-slate-300 px-3 py-2" />
+            </div>
+          </div>
+          <div>
+            <label class="text-sm text-slate-600">Lời nhắn</label>
+            <textarea rows="3" class="w-full mt-1 rounded-xl border border-slate-300 px-3 py-2"></textarea>
+          </div>
+          <button class="w-full py-3 rounded-2xl bg-ink text-white font-semibold">Gửi yêu cầu</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <template id="productCardTpl">
+    <div class="group bg-white rounded-3xl border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow">
+      <div class="relative">
+        <img class="w-full h-44 sm:h-48 object-cover" />
+        <span class="absolute top-3 left-3 bg-white/90 text-xs px-2 py-1 rounded-xl border border-slate-200" data-badge></span>
+        <button class="absolute bottom-3 right-3 px-3 py-2 rounded-xl bg-ink/90 text-white text-sm opacity-0 group-hover:opacity-100 transition" data-quick>
+          Xem nhanh
+        </button>
+      </div>
+      <div class="p-4">
+        <div class="flex items-start justify-between gap-2">
+          <h3 class="font-semibold leading-snug line-clamp-2" data-name></h3>
+          <span class="text-brand-700 font-bold" data-price></span>
+        </div>
+        <div class="mt-1 text-xs text-slate-500" data-cat></div>
+        <div class="mt-2 flex items-center gap-1 text-amber-500 rating" data-rating></div>
+        <button class="mt-3 w-full py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold" data-add>
+          Thêm vào giỏ
+        </button>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    // ====== Data (demo) ======
+    const PRODUCTS = [
+      {id: 's1', name: 'Sushi Cá Hồi (Salmon Nigiri) 2 miếng', price: 69000, category: 'Sushi', rating: 4.8, badge: 'Best Seller', img: 'https://images.unsplash.com/photo-1604908554007-6522ea6f0aa2?q=80&w=1200&auto=format&fit=crop'},
+      {id: 's2', name: 'Sushi Lươn Nướng (Unagi) 2 miếng', price: 99000, category: 'Sushi', rating: 4.7, badge: 'Hot', img: 'https://images.unsplash.com/photo-1632778149955-4f22a11c0f7c?q=80&w=1200&auto=format&fit=crop'},
+      {id: 'r1', name: 'Ramen Tonkotsu', price: 119000, category: 'Ramen', rating: 4.9, badge: 'Signature', img: 'https://images.unsplash.com/photo-1604908176997-4316c6c2f4a5?q=80&w=1200&auto=format&fit=crop'},
+      {id: 'r2', name: 'Ramen Shoyu', price: 109000, category: 'Ramen', rating: 4.6, badge: 'New', img: 'https://images.unsplash.com/photo-1617093727343-374698b1b08d?q=80&w=1200&auto=format&fit=crop'},
+      {id: 'b1', name: 'Bento Cá Hồi Nướng Teriyaki', price: 139000, category: 'Bento', rating: 4.7, badge: 'Combo', img: 'https://images.unsplash.com/photo-1563273942-5a3f84f0fa50?q=80&w=1200&auto=format&fit=crop'},
+      {id: 'b2', name: 'Bento Thịt Heo Chiên Xù (Tonkatsu)', price: 129000, category: 'Bento', rating: 4.5, badge: 'Value', img: 'https://images.unsplash.com/photo-1611143669185-af224c5e3252?q=80&w=1200&auto=format&fit=crop'},
+      {id: 'd1', name: 'Matcha Tiramisu', price: 69000, category: 'Dessert', rating: 4.6, badge: 'Sweet', img: 'https://images.unsplash.com/photo-1505252585461-04db1eb84625?q=80&w=1200&auto=format&fit=crop'},
+      {id: 'd2', name: 'Mochi Kem (3 vị)', price: 59000, category: 'Dessert', rating: 4.4, badge: 'Fresh', img: 'https://images.unsplash.com/photo-1572552634508-046f1a6c23ae?q=80&w=1200&auto=format&fit=crop'},
+      {id: 'k1', name: 'Trà Sữa Matcha (500ml)', price: 49000, category: 'Drink', rating: 4.3, badge: 'Chill', img: 'https://images.unsplash.com/photo-1604908554007-6522ea6f0aa2?q=80&w=1200&auto=format&fit=crop'},
+      {id: 'k2', name: 'Soda Yuzu (500ml)', price: 45000, category: 'Drink', rating: 4.2, badge: 'Cool', img: 'https://images.unsplash.com/photo-1586171764906-8520f38b1bbb?q=80&w=1200&auto=format&fit=crop'},
+      {id: 's3', name: 'Maki Thanh Cua (Kani Maki) 6 miếng', price: 79000, category: 'Sushi', rating: 4.5, badge: 'Value', img: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=1200&auto=format&fit=crop'},
+      {id: 'r3', name: 'Ramen Miso', price: 115000, category: 'Ramen', rating: 4.5, badge: 'Popular', img: 'https://images.unsplash.com/photo-1578922587893-276ef23cba36?q=80&w=1200&auto=format&fit=crop'}
+    ];
+
+    // ====== Helpers ======
+    const VND = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+    function el(tag, attrs={}) {
+      const e = document.createElement(tag);
+      Object.entries(attrs).forEach(([k,v]) => {
+        if (k === 'class') e.className = v; else if (k === 'text') e.textContent = v; else if (k === 'html') e.innerHTML = v; else e.setAttribute(k, v);
+      });
+      return e;
+    }
+
+    // ====== State ======
+    let state = {
+      query: '',
+      category: 'all',
+      sort: 'featured',
+      cart: JSON.parse(localStorage.getItem('tb.cart') || '{}'),
+    };
+
+    // ====== UI: Products ======
+    const grid = $('#productGrid');
+    const tpl = $('#productCardTpl');
+
+    function renderStars(rating) {
+      const count = Math.round(rating);
+      let s = '';
+      for (let i=0;i<5;i++) s += i < count ? '★' : '☆';
+      return `<span class="text-sm">${s}</span><span class="text-xs text-slate-500 ml-1">${rating.toFixed(1)}</span>`
+    }
+
+    function filterProducts() {
+      let list = PRODUCTS.filter(p => p.name.toLowerCase().includes(state.query.toLowerCase()));
+      if (state.category !== 'all') list = list.filter(p => p.category === state.category);
+      switch (state.sort) {
+        case 'price-asc': list.sort((a,b)=>a.price-b.price); break;
+        case 'price-desc': list.sort((a,b)=>b.price-a.price); break;
+        case 'rating-desc': list.sort((a,b)=>b.rating-a.rating); break;
+        default: /* featured */ list.sort((a,b)=>b.rating-a.rating); break;
+      }
+      return list;
+    }
+
+    function renderProducts() {
+      grid.innerHTML = '';
+      const list = filterProducts();
+      if (!list.length) {
+        grid.innerHTML = `<div class='col-span-full text-center text-slate-500'>Không tìm thấy món phù hợp.</div>`;
+        return;
+      }
+      list.forEach(p => {
+        const card = tpl.content.cloneNode(true);
+        const img = card.querySelector('img'); img.src = p.img; img.alt = p.name;
+        card.querySelector('[data-badge]').textContent = p.badge;
+        card.querySelector('[data-name]').textContent = p.name;
+        card.querySelector('[data-price]').textContent = VND.format(p.price);
+        card.querySelector('[data-cat]').textContent = p.category;
+        card.querySelector('[data-rating]').innerHTML = renderStars(p.rating);
+        card.querySelector('[data-add]').addEventListener('click', ()=> addToCart(p.id));
+        card.querySelector('[data-quick]').addEventListener('click', ()=> openQuickView(p));
+        grid.appendChild(card);
+      });
+    }
+
+    // ====== Categories sync (mobile) ======
+    function syncMobileCats(){
+      const ul = $('#mobileCategories');
+      ul.innerHTML = '';
+      $$('.cat-btn').forEach(btn => {
+        const li = el('li');
+        const b = el('button', {class: 'w-full text-left px-4 py-2 rounded-xl hover:bg-slate-100', text: btn.textContent});
+        b.onclick = ()=> { setCategory(btn.dataset.cat); closeSidebar(); };
+        ul.appendChild(li).appendChild(b);
+      });
+    }
+
+    // ====== Cart ======
+    function persistCart(){ localStorage.setItem('tb.cart', JSON.stringify(state.cart)); }
+    function countCart(){ return Object.values(state.cart).reduce((s,i)=> s + i.qty, 0); }
+    function cartSubtotal(){ return Object.values(state.cart).reduce((s,i)=> s + i.qty*i.price, 0); }
+
+    function addToCart(id){
+      const p = PRODUCTS.find(x=>x.id===id);
+      if (!state.cart[id]) state.cart[id] = {id: p.id, name: p.name, price: p.price, qty: 0};
+      state.cart[id].qty++;
+      persistCart();
+      updateCartUI();
+      openCart();
+    }
+    function removeFromCart(id){ delete state.cart[id]; persistCart(); updateCartUI(); }
+    function changeQty(id,delta){ if (state.cart[id]){ state.cart[id].qty = Math.max(1, state.cart[id].qty+delta); persistCart(); updateCartUI(); } }
+
+    function updateCartUI(){
+      $('#cartCount').textContent = countCart();
+      const wrap = $('#cartItems');
+      wrap.innerHTML = '';
+      Object.values(state.cart).forEach(item => {
+        const row = el('div', {class:'flex items-center gap-3 p-3 border rounded-xl'});
+        row.appendChild(el('div', {class:'w-16 h-16 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 text-xs', text: item.name.split(' ')[0]}));
+        const info = el('div', {class:'flex-1'});
+        info.appendChild(el('div', {class:'font-medium', text: item.name}));
+        info.appendChild(el('div', {class:'text-sm text-slate-500', text: VND.format(item.price)}));
+        row.appendChild(info);
+        const qty = el('div', {class:'flex items-center gap-2'});
+        const minus = el('button', {class:'px-2 py-1 rounded-lg bg-slate-100', html:'–'}); minus.onclick = ()=> changeQty(item.id, -1);
+        const span = el('span', {class:'w-8 text-center', text: item.qty});
+        const plus = el('button', {class:'px-2 py-1 rounded-lg bg-slate-100', html:'+'}); plus.onclick = ()=> changeQty(item.id, +1);
+        qty.append(minus, span, plus);
+        row.appendChild(qty);
+        const rm = el('button', {class:'ml-2 p-2 rounded-lg hover:bg-slate-100', html:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6v12m8-12v12M5 6l1 14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-14"/></svg>'});
+        rm.onclick = ()=> removeFromCart(item.id);
+        row.appendChild(rm);
+        wrap.appendChild(row);
+      });
+      const sub = cartSubtotal();
+      $('#subtotal').textContent = VND.format(sub);
+      const shipping = sub > 300000 ? 0 : 15000;
+      $('#shipping').textContent = shipping ? VND.format(shipping) : 'Miễn phí';
+      $('#total').textContent = VND.format(sub + shipping);
+    }
+
+    // ====== Quick View ======
+    function openQuickView(p){
+      $('#modalTitle').textContent = p.name;
+      $('#modalBody').innerHTML = `
+        <div class="flex flex-col md:flex-row gap-4">
+          <img src="${p.img}" alt="${p.name}" class="w-full md:w-1/2 rounded-2xl object-cover" />
+          <div class="flex-1">
+            <div class="text-2xl font-bold">${VND.format(p.price)}</div>
+            <div class="mt-2 text-slate-600">Danh mục: <span class="font-medium">${p.category}</span></div>
+            <div class="mt-1 text-amber-500">${renderStars(p.rating)}</div>
+            <p class="mt-4 text-sm text-slate-600">Nguyên liệu tươi mỗi ngày, nước dùng hầm 12 giờ, gia vị lựa chọn kỹ. Đóng gói giữ nhiệt để bạn nhận món trong tình trạng tốt nhất.</p>
+            <div class="mt-5 flex gap-3">
+              <button class="px-5 py-3 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-semibold" id="qvAdd">Thêm vào giỏ</button>
+              <button class="px-5 py-3 rounded-2xl border border-slate-300" id="qvClose">Đóng</button>
+            </div>
+          </div>
+        </div>`;
+      $('#qvAdd').onclick = ()=> { addToCart(p.id); closeModal(); };
+      $('#qvClose').onclick = closeModal;
+      openModal();
+    }
+
+    // ====== Drawer & Modal ======
+    function openCart(){ $('#cartDrawer').classList.remove('translate-x-full'); }
+    function closeCart(){ $('#cartDrawer').classList.add('translate-x-full'); }
+    function openModal(){ $('#modal').classList.remove('hidden'); }
+    function closeModal(){ $('#modal').classList.add('hidden'); }
+    function openSidebar(){ $('#sidebar').classList.remove('hidden'); }
+    function closeSidebar(){ $('#sidebar').classList.add('hidden'); }
+
+    // ====== Events ======
+    window.addEventListener('DOMContentLoaded', () => {
+      renderProducts();
+      syncMobileCats();
+      updateCartUI();
+
+      // Search
+      const search = $('#search');
+      const sort = $('#sort');
+      search.addEventListener('input', (e)=>{ state.query = e.target.value; renderProducts(); });
+      sort.addEventListener('change', (e)=>{ state.sort = e.target.value; renderProducts(); });
+
+      // Categories
+      $$('.cat-btn').forEach(btn=> btn.addEventListener('click', ()=> setCategory(btn.dataset.cat)));
+
+      // Header actions
+      $('#openCart').onclick = openCart; $('#closeCart').onclick = closeCart;
+      $('#openSearch').onclick = ()=> search.focus();
+      document.addEventListener('keydown', e => { if (e.key === '/') { e.preventDefault(); search.focus(); }});
+
+      // Sidebar
+      $('#openSidebar').onclick = openSidebar; $('#closeSidebar').onclick = closeSidebar; $('#closeSidebarBtn').onclick = closeSidebar;
+      $('#closeModal').onclick = closeModal; $('#xModal').onclick = closeModal;
+
+      // Newsletter
+      $('#newsletter').addEventListener('submit', (e)=>{ e.preventDefault(); $('#newsletterMsg').textContent = 'Đăng ký thành công! Mã giảm 15% đã gửi tới email của bạn.'; e.target.reset(); });
+
+      // Contact
+      $('#openContact').onclick = ()=> { $('#modalTitle').textContent = 'Liên hệ tư vấn'; $('#modalBody').innerHTML = document.querySelector('#contactForm').outerHTML; openModal(); };
+
+      // Year
+      $('#year').textContent = new Date().getFullYear();
+    });
+
+    function setCategory(cat){
+      state.category = cat;
+      $$('.cat-btn').forEach(b=> b.classList.remove('active','bg-ink','text-white'));
+      const active = $(`.cat-btn[data-cat="${cat}"]`); if (active) active.classList.add('active','bg-ink','text-white');
+      renderProducts();
+    }
+  </script>
+</body>
+</html>
